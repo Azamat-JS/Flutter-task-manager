@@ -58,7 +58,7 @@ class _SignupPageState extends State<SignupPage> {
                 validator: (value) {
                   if (value == null ||
                       value.trim().isEmpty ||
-                      value.trim().contains("@")) {
+                      !value.trim().contains("@")) {
                     return "Email field is invalid";
                   }
                   return null;
