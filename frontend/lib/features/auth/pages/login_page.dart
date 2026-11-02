@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const LoginPage());
+  static MaterialPageRoute route() =>
+      MaterialPageRoute(builder: (context) => const LoginPage());
   const LoginPage({super.key});
 
   @override
