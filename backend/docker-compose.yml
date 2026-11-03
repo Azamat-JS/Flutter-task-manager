@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./
+    ports:
+      - "3000:8000"
+    environment:
+      - PORT=8000
+      - DATABASE_URL=postgresql://postgres:Azamat$$998877@db:5432/tasks
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+  db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Azamat$$998877
+      POSTGRES_DB: tasks
+    ports:
+      - "5432:5432"

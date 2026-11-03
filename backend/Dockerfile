@@ -2,9 +2,13 @@ FROM node:20
 
 WORKDIR /app
 
-COPY . .
+RUN npm install -g pnpm@10.16.1
 
-RUN pnpm install
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
 
 EXPOSE 8000
 
