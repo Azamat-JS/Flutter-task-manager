@@ -1,15 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class UserModel {
   final String id;
   final String name;
   final String email;
+  final String token;
   final DateTime createdAt;
   final DateTime updatedAt;
   UserModel({
     required this.id,
     required this.name,
     required this.email,
+    required this.token,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -18,6 +21,7 @@ class UserModel {
     String? id,
     String? name,
     String? email,
+    String? token,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -25,6 +29,7 @@ class UserModel {
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
+      token: token ?? this.token,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -35,6 +40,7 @@ class UserModel {
       'id': id,
       'name': name,
       'email': email,
+      'token': token,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
@@ -45,6 +51,7 @@ class UserModel {
       id: map['id'] as String,
       name: map['name'] as String,
       email: map['email'] as String,
+      token: map['token'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
     );
@@ -57,7 +64,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserModel(id: $id, name: $name, email: $email, token: $token, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -67,6 +74,7 @@ class UserModel {
     return other.id == id &&
         other.name == name &&
         other.email == email &&
+        other.token == token &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
   }
@@ -76,6 +84,7 @@ class UserModel {
     return id.hashCode ^
         name.hashCode ^
         email.hashCode ^
+        token.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode;
   }
