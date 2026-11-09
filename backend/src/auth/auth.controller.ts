@@ -22,7 +22,6 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  // Public: the client calls this when its access token has expired.
   @Public()
   @Post('refresh')
   @HttpCode(200)
@@ -37,29 +36,8 @@ export class AuthController {
     return this.authService.logout(refreshToken);
   }
 
-  // Protected by the global guard: needs `Authorization: Bearer <accessToken>`.
   @Get('me')
   me(@CurrentUser() user: PublicUser) {
     return user;
-  }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: User) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
   }
 }

@@ -10,11 +10,6 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { users } from 'db/schema';
 import { publicUserColumns, type PublicUser } from './auth.types';
 
-/**
- * Reads `Authorization: Bearer <jwt>` on every request (the module's global
- * guard runs it), verifies the token with the `accessToken` options from
- * AppModule, and loads the user it belongs to.
- */
 @Injectable()
 export class JwtAuth extends JwtBearerProvider<PublicUser> {
   constructor(
@@ -22,7 +17,7 @@ export class JwtAuth extends JwtBearerProvider<PublicUser> {
     private readonly db: NodePgDatabase,
     registry: AuthenticationRegistry,
   ) {
-    super(); // same key/issuer/audience as the module's `accessToken` option
+    super();
     registry.registerProvider(this);
   }
 
@@ -32,6 +27,6 @@ export class JwtAuth extends JwtBearerProvider<PublicUser> {
       .select(publicUserColumns)
       .from(users)
       .where(eq(users.id, sub));
-    return user ?? null; // a deleted user -> token rejected with 401
+    return user ?? null;
   }
 }
