@@ -26,5 +26,29 @@ class AuthRemoteRepository {
     }
   }
 
-  Future<void> login({required String email, required String password}) async {}
+  Future<UserModel> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final res = await http.post(
+        Uri.parse('${Constants.backendUri}/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"email": email, "password": password}),
+      );
+
+      final body = jsonDecode(res.body) as Map<String, dynamic>;
+
+      if (res.statusCode != 200) {
+        throw body['message'] ?? 'Login failed';
+      }
+
+      return UserModel.fromMap({
+        ...body['user'] as Map<String, dynamic>,
+        'token': body['accessToken'],
+      });
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
