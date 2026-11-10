@@ -11,7 +11,18 @@ class AuthCubit extends Cubit<AuthState> {
     required String name,
     required String email,
     required String password,
-  }) {
-    try {} catch (e) {}
+  }) async {
+    try {
+      emit(AuthLoading());
+      await authRemoteRepository.signUp(
+        name: name,
+        email: email,
+        password: password,
+      );
+
+      emit(AuthSignUp());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
   }
 }
