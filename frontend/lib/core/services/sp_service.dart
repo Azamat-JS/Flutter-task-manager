@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpService {
-  void setToken(String token) async {
+  Future<void> setToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('Authorization', token);
+    await prefs.setString('Authorization', token);
   }
 
-  Future<String?> getToken(String token) async {
+  Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('Authorization');
   }
