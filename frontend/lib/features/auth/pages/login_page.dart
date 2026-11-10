@@ -22,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    formKey.currentState!.validate();
     super.dispose();
   }
 
