@@ -42,9 +42,20 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is AuthError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
+          } else if (state is AuthSignUp) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Account created! Login NOW!')),
+            );
+          }
         },
         builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
           return Padding(
             padding: const EdgeInsets.all(15.0),
             child: Form(
