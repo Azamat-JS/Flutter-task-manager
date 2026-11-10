@@ -12,6 +12,7 @@ export class AuthController {
   @Public()
   @Post('register')
   register(@Body() createAuthDto: NewUser) {
+    console.log(createAuthDto)
     return this.authService.register(createAuthDto);
   }
 
