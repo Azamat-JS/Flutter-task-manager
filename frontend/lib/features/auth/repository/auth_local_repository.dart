@@ -1,3 +1,4 @@
+import 'package:frontend/models/user_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
@@ -28,11 +29,30 @@ class AuthLocalRepository {
  email TEXT NOT NULL,
  token TEXT NOT NULL,
  name TEXT NOT NULL,
- created_at INT NOT NULL,
- updated_at INT NOT NULL
+ createdAt INT NOT NULL,
+ updatedAt INT NOT NULL
  );
 ''');
       },
     );
+  }
+
+  Future<void> insertUser(UserModel userModel) async {
+    final db = await database;
+    await db.insert(
+      tableName,
+      userModel.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<UserModel?> getUser() async {
+    final db = await database;
+    final res = await db.query(tableName, limit: 1);
+
+    if (res.isNotEmpty) {
+      return UserModel.fromMap(res.first);
+    }
+    return null;
   }
 }
