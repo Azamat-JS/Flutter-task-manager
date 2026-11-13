@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/constants/utils.dart';
+import 'package:intl/intl.dart';
 
 class DateSelector extends StatefulWidget {
   const DateSelector({super.key});
@@ -8,8 +10,12 @@ class DateSelector extends StatefulWidget {
 }
 
 class _DateSelectorState extends State<DateSelector> {
+  int weekOffSet = 0;
+  DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
+    final weekDates = generateWeekDates(weekOffSet);
+    String monthName = DateFormat("MMMM").format(weekDates.first);
     return Column(
       children: [
         Padding(
@@ -20,18 +26,90 @@ class _DateSelectorState extends State<DateSelector> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    weekOffSet--;
+                  });
+                },
                 icon: const Icon(Icons.arrow_back_ios),
               ),
               Text(
-                'November',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                monthName,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    weekOffSet++;
+                  });
+                },
                 icon: const Icon(Icons.arrow_forward_ios),
               ),
             ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            height: 80,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: weekDates.length,
+              itemBuilder: (context, index) {
+                final date = weekDates[index];
+                bool isSelected =
+                    DateFormat("d").format(selectedDate) ==
+                        DateFormat('d').format(date) &&
+                    selectedDate.month == date.month &&
+                    selectedDate.year == date.year;
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                  child: Container(
+                    width: 70,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.deepOrangeAccent : null,
+                      border: Border.all(
+                        color: isSelected
+                            ? Colors.deepOrangeAccent
+                            : Colors.grey.shade300,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DateFormat('d').format(date),
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : null,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          DateFormat("E").format(date),
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : null,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],
