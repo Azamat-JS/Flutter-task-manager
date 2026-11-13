@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/core/constants/utils.dart';
 import 'package:frontend/features/home/widgets/task_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -32,8 +33,12 @@ class HomePage extends StatelessWidget {
                 width: 10,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color.fromRGBO(246, 222, 194, 1),
+                  color: Colors.grey,
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text('10:00AM', style: TextStyle(fontSize: 17)),
               ),
             ],
           ),
