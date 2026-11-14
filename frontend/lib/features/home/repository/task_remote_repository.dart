@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:frontend/core/constants/constants.dart';
+import 'package:frontend/models/task_model.dart';
 import 'package:http/http.dart' as http;
 
 class TaskRemoteRepository {
-  Future<void> createTask({
+  Future<TaskModel> createTask({
     required String title,
     required String description,
     required hexColor,
@@ -28,6 +29,7 @@ class TaskRemoteRepository {
       if (res.statusCode != 201) {
         throw body['message'] ?? 'Failed to fetch user';
       }
+      return TaskModel.fromJson(res.body);
     } catch (e) {
       rethrow;
     }
