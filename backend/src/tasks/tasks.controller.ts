@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CurrentUser } from '@nestjs/authentication';
 import { TasksService } from './tasks.service';
 import type { NewTask } from 'db/schema';
@@ -8,12 +8,19 @@ import type { PublicUser } from '../auth/auth.types';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
 
+  @Get()
+  async getAllTasks(
+    @CurrentUser() user: PublicUser,
+  ) {
+    return this.tasksService.getAllTasks(user.id)
+  }
+
   @Post('create')
   async createTask(
     @Body() newTask: Omit<NewTask, 'uid'>,
     @CurrentUser() user: PublicUser,
   ) {
-    // The owner always comes from the access token, never from the body.
+
     return this.tasksService.createTask({ ...newTask, uid: user.id });
   }
 }
