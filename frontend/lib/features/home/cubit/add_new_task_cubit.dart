@@ -16,13 +16,15 @@ class AddNewTaskCubit extends Cubit<AddNewTaskState> {
     required DateTime dueAt,
   }) async {
     try {
-      taskRemoteRepository.createTask(
+      emit(AddNewTaskLoading());
+      final taskModel = await taskRemoteRepository.createTask(
         title: title,
         description: description,
         hexColor: color,
         token: token,
         dueAt: dueAt,
       );
+      emit(AddNewTaskSuccess(taskModel));
     } catch (e) {
       emit(AddNewTaskError(e.toString()));
     }
