@@ -25,7 +25,7 @@ import { TasksModule } from './tasks/tasks.module';
           key: config.getOrThrow<string>('JWT_SECRET'), // HS256, >= 32 bytes
           issuer: 'flutter-task-api',
           audience: 'flutter-app',
-          ttl: '15m',
+          ttl: '1d',
         },
         refreshToken: { ttl: '30d', absoluteTtl: '90d' },
         // Refresh tokens live in memory until a DB-backed RefreshTokenStore

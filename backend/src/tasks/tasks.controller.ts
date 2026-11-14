@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CurrentUser } from '@nestjs/authentication';
 import { TasksService } from './tasks.service';
 import type { NewTask } from 'db/schema';
@@ -22,5 +22,13 @@ export class TasksController {
   ) {
 
     return this.tasksService.createTask({ ...newTask, uid: user.id });
+  }
+
+  @Delete('delete/:id')
+  async deleteTask(
+    @Param('id') id: string,
+    @CurrentUser() user: PublicUser,
+  ) {
+    return this.tasksService.deleteTask(id, user)
   }
 }
