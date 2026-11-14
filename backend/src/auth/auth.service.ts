@@ -9,7 +9,6 @@ import { NewUser, User, users } from 'db/schema';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { type LoginDto, type PublicUser, toPublicUser } from './auth.types';
-import { JwtAuth } from './jwt-auth.provider';
 
 
 @Injectable()
@@ -19,7 +18,6 @@ export class AuthService {
     private readonly db: NodePgDatabase,
     private readonly passwordHasher: PasswordHasher,
     private readonly tokenService: TokenService,
-    private readonly jwt: JwtAuth,
   ) { }
 
   async register({ email, password, name }: NewUser): Promise<PublicUser> {

@@ -6,6 +6,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthenticationModule } from '@nestjs/authentication';
 import { AuthModule } from './auth/auth.module';
+import { TasksModule } from './tasks/tasks.module';
 
 
 @Module({
@@ -33,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
     AuthModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
