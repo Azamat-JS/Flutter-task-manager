@@ -1,20 +1,25 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:frontend/core/constants/utils.dart';
+
 class TaskModel {
   final String id;
   final String uid;
   final String title;
   final String description;
+  final Color color;
   final DateTime createdAt;
-  final DateTime udpatedAt;
+  final DateTime updatedAt;
   final DateTime dueAt;
   TaskModel({
     required this.id,
     required this.uid,
     required this.title,
     required this.description,
+    required this.color,
     required this.createdAt,
-    required this.udpatedAt,
+    required this.updatedAt,
     required this.dueAt,
   });
 
@@ -23,8 +28,9 @@ class TaskModel {
     String? uid,
     String? title,
     String? description,
+    Color? color,
     DateTime? createdAt,
-    DateTime? udpatedAt,
+    DateTime? updatedAt,
     DateTime? dueAt,
   }) {
     return TaskModel(
@@ -32,21 +38,24 @@ class TaskModel {
       uid: uid ?? this.uid,
       title: title ?? this.title,
       description: description ?? this.description,
+      color: color ?? this.color,
       createdAt: createdAt ?? this.createdAt,
-      udpatedAt: udpatedAt ?? this.udpatedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       dueAt: dueAt ?? this.dueAt,
     );
   }
 
+  // Same keys and formats the backend uses, so toMap/fromMap round-trip.
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'uid': uid,
       'title': title,
       'description': description,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'udpatedAt': udpatedAt.millisecondsSinceEpoch,
-      'dueAt': dueAt.millisecondsSinceEpoch,
+      'hexColor': rgbToHex(color),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'dueAt': dueAt.toIso8601String(),
     };
   }
 
@@ -56,8 +65,9 @@ class TaskModel {
       uid: map['uid'] ?? "",
       title: map['title'] ?? "",
       description: map['description'] ?? "",
+      color: hexToRgb(map['hexColor'] ?? 'FFFFFF'),
       createdAt: DateTime.parse(map['createdAt']),
-      udpatedAt: DateTime.parse(map['udpatedAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
       dueAt: DateTime.parse(map['dueAt']),
     );
   }
@@ -69,7 +79,7 @@ class TaskModel {
 
   @override
   String toString() {
-    return 'TaskModel(id: $id, uid: $uid, title: $title, description: $description, createdAt: $createdAt, udpatedAt: $udpatedAt, dueAt: $dueAt)';
+    return 'TaskModel(id: $id, uid: $uid, title: $title, description: $description, color: $color, createdAt: $createdAt, updatedAt: $updatedAt, dueAt: $dueAt)';
   }
 
   @override
@@ -80,8 +90,9 @@ class TaskModel {
         other.uid == uid &&
         other.title == title &&
         other.description == description &&
+        other.color == color &&
         other.createdAt == createdAt &&
-        other.udpatedAt == udpatedAt &&
+        other.updatedAt == updatedAt &&
         other.dueAt == dueAt;
   }
 
@@ -91,8 +102,9 @@ class TaskModel {
         uid.hashCode ^
         title.hashCode ^
         description.hashCode ^
+        color.hashCode ^
         createdAt.hashCode ^
-        udpatedAt.hashCode ^
+        updatedAt.hashCode ^
         dueAt.hashCode;
   }
 }

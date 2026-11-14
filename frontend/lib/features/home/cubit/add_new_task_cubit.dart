@@ -20,7 +20,7 @@ class AddNewTaskCubit extends Cubit<AddNewTaskState> {
       final taskModel = await taskRemoteRepository.createTask(
         title: title,
         description: description,
-        hexColor: color,
+        color: color,
         token: token,
         dueAt: dueAt,
       );
