@@ -11,11 +11,17 @@ final class TasksLoading extends TasksState {}
 final class TasksError extends TasksState {
   final String error;
 
-  TasksError(this.error);
+  const TasksError(this.error);
 }
 
 final class TasksSuccess extends TasksState {
   final TaskModel taskModel;
 
   const TasksSuccess(this.taskModel);
+}
+
+final class GetTasksSuccess extends TasksState {
+  final List<TaskModel> tasks;
+
+  const GetTasksSuccess(this.tasks);
 }

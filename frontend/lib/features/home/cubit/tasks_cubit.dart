@@ -29,4 +29,14 @@ class TasksCubit extends Cubit<TasksState> {
       emit(TasksError(e.toString()));
     }
   }
+
+  Future<void> getAllTasks({required String token}) async {
+    try {
+      emit(TasksLoading());
+      final tasks = await taskRemoteRepository.getTasks(token: token);
+      emit(GetTasksSuccess(tasks));
+    } catch (e) {
+      emit(TasksError(e.toString()));
+    }
+  }
 }
