@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/features/home/repository/task_remote_repository.dart';
 import 'package:frontend/models/task_model.dart';
 
-part 'add_new_task_state.dart';
+part 'tasks_state.dart';
 
-class AddNewTaskCubit extends Cubit<AddNewTaskState> {
-  AddNewTaskCubit() : super(AddNewTaskInitial());
+class TasksCubit extends Cubit<TasksState> {
+  TasksCubit() : super(TasksInitial());
   final taskRemoteRepository = TaskRemoteRepository();
   Future<void> createNewTask({
     required String title,
@@ -16,7 +16,7 @@ class AddNewTaskCubit extends Cubit<AddNewTaskState> {
     required DateTime dueAt,
   }) async {
     try {
-      emit(AddNewTaskLoading());
+      emit(TasksLoading());
       final taskModel = await taskRemoteRepository.createTask(
         title: title,
         description: description,
@@ -24,9 +24,9 @@ class AddNewTaskCubit extends Cubit<AddNewTaskState> {
         token: token,
         dueAt: dueAt,
       );
-      emit(AddNewTaskSuccess(taskModel));
+      emit(TasksSuccess(taskModel));
     } catch (e) {
-      emit(AddNewTaskError(e.toString()));
+      emit(TasksError(e.toString()));
     }
   }
 }
