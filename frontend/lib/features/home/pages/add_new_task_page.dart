@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/features/auth/cubit/auth_cubit.dart';
 import 'package:frontend/features/home/cubit/tasks_cubit.dart';
+import 'package:frontend/features/home/pages/home_page.dart';
 import 'package:intl/intl.dart';
 
 class AddNewTaskPage extends StatefulWidget {
@@ -77,7 +78,11 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Task added successfully!')),
             );
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              HomePage.route(),
+              (_) => false,
+            );
           }
         },
         builder: (context, state) {

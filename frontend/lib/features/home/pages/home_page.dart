@@ -19,6 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime selectedDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -49,11 +51,25 @@ class _HomePageState extends State<HomePage> {
             return Center(child: Text(state.error));
           }
           if (state is GetTasksSuccess) {
-            final tasks = state.tasks;
+            final tasks = state.tasks
+                .where(
+                  (elem) =>
+                      DateFormat("d").format(elem.dueAt) ==
+                          DateFormat('d').format(selectedDate) &&
+                      selectedDate.month == elem.dueAt.month &&
+                      selectedDate.year == elem.dueAt.year,
+                )
+                .toList();
             return Column(
               children: [
-                const DateSelector(),
-
+                DateSelector(
+                  selectedDate: selectedDate,
+                  ontap: (date) {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: tasks.length,

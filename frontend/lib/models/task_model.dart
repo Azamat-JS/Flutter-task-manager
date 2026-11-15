@@ -66,9 +66,11 @@ class TaskModel {
       title: map['title'] ?? "",
       description: map['description'] ?? "",
       color: hexToRgb(map['hexColor'] ?? 'FFFFFF'),
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
-      dueAt: DateTime.parse(map['dueAt']),
+      // Backend sends UTC ("...Z"); convert to local so day/time comparisons
+      // and formatting match what the user picked on their device.
+      createdAt: DateTime.parse(map['createdAt']).toLocal(),
+      updatedAt: DateTime.parse(map['updatedAt']).toLocal(),
+      dueAt: DateTime.parse(map['dueAt']).toLocal(),
     );
   }
 
