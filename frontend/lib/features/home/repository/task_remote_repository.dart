@@ -36,4 +36,27 @@ class TaskRemoteRepository {
     }
     return TaskModel.fromMap(body);
   }
+
+  Future<List<TaskModel>> getTasks({required String token}) async {
+    final res = await http.get(
+      Uri.parse("${Constants.backendUri}/tasks/create"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+
+    if (res.statusCode != 200) {
+      throw body['message'] ?? 'Failed to create task';
+    }
+    final listOfTask = jsonDecode(res.body);
+    List<TaskModel> tasksList = [];
+
+    for (var element in listOfTask) {
+      tasksList.add(TaskModel.fromMap(element));
+    }
+    return tasksList;
+  }
 }
