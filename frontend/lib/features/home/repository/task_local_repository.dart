@@ -22,7 +22,14 @@ class TaskLocalRepository {
     final path = join(dbPath, 'tasks.db');
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < newVersion) {
+          await db.execute(
+            'ALTER TABLE $tableName ADD COLUMN color TEXT NOT NULL DEFAULT "default_color"',
+          );
+        }
+      },
       onCreate: (db, version) {
         return db.execute('''
  CREATE TABLE $tableName(
@@ -31,6 +38,7 @@ class TaskLocalRepository {
  description TEXT NOT NULL,
  uid TEXT NOT NULL,
  duaAt TEXT NOT NULL,
+ color TEXT NOT NULL,
  createdAt TEXT NOT NULL,
  updatedAt TEXT NOT NULL
  );
