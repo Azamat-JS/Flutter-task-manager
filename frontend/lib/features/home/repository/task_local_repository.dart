@@ -1,3 +1,5 @@
+import 'dart:ui_web';
+
 import 'package:frontend/models/task_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -48,6 +50,11 @@ class TaskLocalRepository {
       );
     }
     await batch.commit(noResult: true);
+  }
+
+  Future<void> insertTask(TaskModel task) async {
+    final db = await database;
+    await db.insert(tableName, task.toMap());
   }
 
   Future<List<TaskModel>> getTasks() async {
