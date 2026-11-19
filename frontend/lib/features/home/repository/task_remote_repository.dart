@@ -109,14 +109,15 @@ class TaskRemoteRepository {
         body: jsonEncode(taskListInMap),
       );
 
-      final body = jsonDecode(res.body) as Map<String, dynamic>;
-
-      if (res.statusCode != 201) {
-        throw body['message'] ?? 'Failed to create task';
+      if (res.statusCode == 201) {
+        return true;
       }
-      return true;
+
+      final body = jsonDecode(res.body);
+      final message = body is Map<String, dynamic> ? body['message'] : null;
+      throw message ?? 'Failed to sync tasks';
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return false;
     }
   }

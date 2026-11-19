@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
-import { NewTask, Task, tasks, users } from 'db/schema';
-import { and, eq } from 'drizzle-orm';
+import { NewTask, Task, tasks } from 'db/schema';
+import { and, eq, inArray } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { PublicUser } from 'src/auth/auth.types';
 
@@ -32,13 +32,34 @@ export class TasksService {
     }
 
     async syncTask(taskList: Task[], user: PublicUser) {
-        const filteredTasks: NewTask[] = [];
-        for (let t of taskList) {
-            t = { ...t, dueAt: new Date(t.dueAt!), uid: user.id }
-            filteredTasks.push(t);
+        if (taskList.length === 0) {
+            return [];
         }
-        const pushedTasks = await this.db.insert(tasks).values(filteredTasks).returning();
-        return pushedTasks;
 
+        const taskIds = [...new Set(taskList.map((task) => task.id))];
+        const tasksToInsert: NewTask[] = taskList.map((task) => ({
+            ...task,
+            createdAt: new Date(task.createdAt!),
+            updatedAt: new Date(task.updatedAt!),
+            dueAt: new Date(task.dueAt!),
+            uid: user.id,
+        }));
+
+        return this.db.transaction(async (tx) => {
+            await tx
+                .insert(tasks)
+                .values(tasksToInsert)
+                .onConflictDoNothing({ target: tasks.id });
+
+            const syncedTasks = await tx
+                .select()
+                .from(tasks)
+                .where(and(eq(tasks.uid, user.id), inArray(tasks.id, taskIds)));
+
+            if (syncedTasks.length !== taskIds.length) {
+                throw new ConflictException('One or more task IDs are already in use');
+            }
+            return syncedTasks;
+        }, { isolationLevel: 'read committed' });
     }
 }

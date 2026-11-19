@@ -29,7 +29,7 @@ export class TasksController {
     @Body() taskList: Task[],
     @CurrentUser() user: PublicUser,
   ) {
-    console.log(taskList, user)
+    return this.tasksService.syncTask(taskList, user)
   }
 
   @Delete('delete/:id')

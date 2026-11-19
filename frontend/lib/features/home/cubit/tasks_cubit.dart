@@ -48,13 +48,19 @@ class TasksCubit extends Cubit<TasksState> {
 
   Future<void> syncTasks(String token) async {
     final unsyncTasks = await taskLocalRepository.getUnsyncedTasks();
+    if (unsyncTasks.isEmpty) {
+      return;
+    }
     print(unsyncTasks);
     final isSynced = await taskRemoteRepository.syncTasks(
       tasks: unsyncTasks,
       token: token,
     );
     if (isSynced) {
-      //
+      print('synced done');
+      for (final task in unsyncTasks) {
+        taskLocalRepository.updateRowValue(task.id, 1);
+      }
     }
   }
 }
