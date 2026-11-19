@@ -90,4 +90,34 @@ class TaskRemoteRepository {
       rethrow;
     }
   }
+
+  Future<bool> syncTasks({
+    required List<TaskModel> tasks,
+    required String token,
+  }) async {
+    try {
+      final taskListInMap = [];
+      for (final task in tasks) {
+        taskListInMap.add(task.toMap());
+      }
+      final res = await http.post(
+        Uri.parse("${Constants.backendUri}/tasks/sync"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(taskListInMap),
+      );
+
+      final body = jsonDecode(res.body) as Map<String, dynamic>;
+
+      if (res.statusCode != 201) {
+        throw body['message'] ?? 'Failed to create task';
+      }
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

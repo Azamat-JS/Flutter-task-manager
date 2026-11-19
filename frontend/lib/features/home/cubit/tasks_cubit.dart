@@ -45,4 +45,10 @@ class TasksCubit extends Cubit<TasksState> {
       emit(TasksError(e.toString()));
     }
   }
+
+  Future<void> syncTasks(String token) async {
+    final unsyncTasks = await taskLocalRepository.getUnsyncedTasks();
+    print(unsyncTasks);
+    taskRemoteRepository.syncTasks(tasks: unsyncTasks, token: token);
+  }
 }

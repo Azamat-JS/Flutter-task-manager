@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CurrentUser } from '@nestjs/authentication';
 import { TasksService } from './tasks.service';
-import type { NewTask } from 'db/schema';
+import type { NewTask, Task } from 'db/schema';
 import type { PublicUser } from '../auth/auth.types';
 
 @Controller('tasks')
@@ -22,6 +22,14 @@ export class TasksController {
   ) {
 
     return this.tasksService.createTask({ ...newTask, uid: user.id });
+  }
+
+  @Post('sync')
+  async syncTask(
+    @Body() tasks: Task[],
+    @CurrentUser() user: PublicUser,
+  ) {
+    console.log(tasks)
   }
 
   @Delete('delete/:id')
