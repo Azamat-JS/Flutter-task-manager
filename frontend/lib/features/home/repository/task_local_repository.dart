@@ -22,11 +22,11 @@ class TaskLocalRepository {
     final path = join(dbPath, 'tasks.db');
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < newVersion) {
           await db.execute(
-            'ALTER TABLE $tableName ADD COLUMN color TEXT NOT NULL DEFAULT "default_color"',
+            'ALTER TABLE $tableName ADD COLUMN isSynced INT NOT NULL',
           );
         }
       },
@@ -40,7 +40,8 @@ class TaskLocalRepository {
  duaAt TEXT NOT NULL,
  color TEXT NOT NULL,
  createdAt TEXT NOT NULL,
- updatedAt TEXT NOT NULL
+ updatedAt TEXT NOT NULL,
+ isSynced INT NOT NULL
  );
 ''');
       },
