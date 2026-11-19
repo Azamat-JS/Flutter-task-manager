@@ -98,4 +98,23 @@ class TaskLocalRepository {
     }
     return [];
   }
+
+  Future<List<TaskModel>> getUnsyncedTasks() async {
+    final db = await database;
+
+    final result = await db.query(
+      tableName,
+      where: 'isSynced = ?',
+      whereArgs: [0],
+    );
+
+    if (result.isNotEmpty) {
+      List<TaskModel> tasks = [];
+      for (final elem in result) {
+        tasks.add(TaskModel.fromMap(elem));
+      }
+      return tasks;
+    }
+    return [];
+  }
 }
