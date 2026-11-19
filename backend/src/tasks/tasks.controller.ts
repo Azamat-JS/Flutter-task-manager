@@ -20,7 +20,6 @@ export class TasksController {
     @Body() newTask: Omit<NewTask, 'uid'>,
     @CurrentUser() user: PublicUser,
   ) {
-
     return this.tasksService.createTask({ ...newTask, uid: user.id });
   }
 
