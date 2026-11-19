@@ -70,7 +70,7 @@ class TaskModel {
       uid: map['uid'] ?? "",
       title: map['title'] ?? "",
       description: map['description'] ?? "",
-      color: hexToRgb(map['color'] ?? 'FFFFFF'),
+      color: hexToRgb(map['hexColor'] ?? 'FFFFFF'),
       createdAt: DateTime.parse(map['createdAt']).toLocal(),
       updatedAt: DateTime.parse(map['updatedAt']).toLocal(),
       dueAt: DateTime.parse(map['dueAt']).toLocal(),

@@ -52,12 +52,11 @@ class TaskRemoteRepository {
           dueAt: dueAt,
           isSynced: 0,
         );
-        taskLocalRepository.insertTask(taskModel);
+        await taskLocalRepository.insertTask(taskModel);
+        return taskModel;
       } catch (e) {
         rethrow;
       }
-
-      rethrow;
     }
   }
 
@@ -78,11 +77,11 @@ class TaskRemoteRepository {
         throw message ?? 'Failed to fetch tasks';
       }
 
-      await taskLocalRepository.insertTasks(body);
-
-      return (body as List<dynamic>)
+      final tasks = (body as List<dynamic>)
           .map((e) => TaskModel.fromMap(e as Map<String, dynamic>))
           .toList();
+      await taskLocalRepository.insertTasks(tasks);
+      return tasks;
     } catch (e) {
       final tasks = await taskLocalRepository.getTasks();
       if (tasks.isNotEmpty) {
