@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
-import { NewTask, tasks, users } from 'db/schema';
+import { NewTask, Task, tasks, users } from 'db/schema';
 import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { PublicUser } from 'src/auth/auth.types';
@@ -29,5 +29,16 @@ export class TasksService {
             .where(and(eq(tasks.id, id), eq(tasks.uid, user.id)));
 
         return 'Deleted successfully!'
+    }
+
+    async syncTask(taskList: Task[], user: PublicUser) {
+        const filteredTasks: NewTask[] = [];
+        for (let t of taskList) {
+            t = { ...t, dueAt: new Date(t.dueAt!), uid: user.id }
+            filteredTasks.push(t);
+        }
+        const pushedTasks = await this.db.insert(tasks).values(filteredTasks).returning();
+        return pushedTasks;
+
     }
 }

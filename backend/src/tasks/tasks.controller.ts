@@ -26,10 +26,10 @@ export class TasksController {
 
   @Post('sync')
   async syncTask(
-    @Body() tasks: Task[],
+    @Body() taskList: Task[],
     @CurrentUser() user: PublicUser,
   ) {
-    console.log(tasks)
+    console.log(taskList, user)
   }
 
   @Delete('delete/:id')
