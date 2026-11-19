@@ -74,7 +74,7 @@ class TaskModel {
       createdAt: DateTime.parse(map['createdAt']).toLocal(),
       updatedAt: DateTime.parse(map['updatedAt']).toLocal(),
       dueAt: DateTime.parse(map['dueAt']).toLocal(),
-      isSynced: map['isSynced'] ?? 0,
+      isSynced: map['isSynced'] ?? 1,
     );
   }
 
